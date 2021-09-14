@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class Player : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
-    [SerializeField] Camera mainCamera;
     [SerializeField] LayerMask layerMask;
     [SerializeField] Animator playerAnimator;
     [SerializeField] PlayerInfo playerinfo;
@@ -45,6 +44,7 @@ public class Player : MonoBehaviour
         playerNavMeshAgent = GetComponent<NavMeshAgent>();
         playerState = State.Idle;
         playerinfo.SetPlayerInfo(100, 100, 10, 10);
+
         //mainCamera = GameObject.Find("Main Camera");
     }
 
@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
             Vector3 playerMove = new Vector3(Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime,
                                              0,
                                              Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime);
-            playerNavMeshAgent.speed = 50f * moveSpeed * Time.deltaTime; //키보드 이동과 속도 동일화
+            //playerNavMeshAgent.speed = 50f * moveSpeed * Time.deltaTime; //키보드 이동과 속도 동일화
             if (playerMove != Vector3.zero)
             {
                 playerRigidbody.MovePosition(transform.position + playerMove);
@@ -141,12 +141,12 @@ public class Player : MonoBehaviour
             }
             else if (Input.GetMouseButton(0) && subMenu.CheckPointUI())
             {
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 playerNavMeshAgent.enabled = true;
                 if (Physics.Raycast(ray, out RaycastHit raycastHit, 100f, layerMask))
                 {
-                    playerNavMeshAgent.destination = raycastHit.point;
-                    Debug.Log(raycastHit.point.x +" , "+raycastHit.point.y + " , " + raycastHit.point.z);
+                    playerNavMeshAgent.destination = new Vector3(raycastHit.point.x, 0, raycastHit.point.z);
+                    Debug.Log(playerNavMeshAgent.destination.x +" , "+ playerNavMeshAgent.destination.y + " , " + playerNavMeshAgent.destination.z);
                 }
                 ChangeState(State.Move);
             }

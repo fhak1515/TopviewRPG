@@ -12,6 +12,7 @@ public class InGameSystem : MonoBehaviour
     public static GameObject mainPlayer; //메인 플레이어
     public static SubMenuMain mainSubMenu;
     public static ItemsList mainItemList;
+    [SerializeField]GameObject movePoint;
     private void Start()
     {
         mainItemList = GetComponent<ItemsList>();
@@ -33,5 +34,9 @@ public class InGameSystem : MonoBehaviour
             if (!mainSubMenu)
                 mainSubMenu = GameObject.Find("SubMenu").GetComponent<SubMenuMain>();
         }
+    }
+    public GameObject GetMovePointObject()
+    {
+        return movePoint;
     }
 }

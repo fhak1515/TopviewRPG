@@ -42,4 +42,9 @@ public class Inventory : MonoBehaviour
         }
         return playerinfo;
     }
+
+    private void OnDestroy()
+    {
+        submenu.RemoveUIObject(gameObject);
+    }
 }

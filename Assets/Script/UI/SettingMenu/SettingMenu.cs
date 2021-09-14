@@ -37,4 +37,10 @@ public class SettingMenu : MonoBehaviour
         submenu.FindDeleteObejct(gameObject);
         Destroy(gameObject);
     }
+
+    private void OnDestroy()
+    {
+        submenu.RemoveUIObject(gameObject);
+    }
+
 }

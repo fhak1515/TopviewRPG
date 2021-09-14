@@ -78,7 +78,15 @@ public class SubMenuMain : MonoBehaviour
 
     public void SetUIObject(GameObject uiobject)
     {
+        Debug.Log("SetStart" + objects.Count);
         objects.Add(uiobject);
+        Debug.Log("SetEnd" + objects.Count);
+    }
+    public void RemoveUIObject(GameObject uiobject)
+    {
+        Debug.Log("RemoveStart" + objects.Count);
+        objects.Remove(uiobject);
+        Debug.Log("RemoveEnd" + objects.Count);
     }
 
     public void FindDeleteObejct(GameObject uiobject)

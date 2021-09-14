@@ -9,10 +9,12 @@ public class InventoryItems : MonoBehaviour
     PlayerInfo playerinfo;
     List<GameObject> items = new List<GameObject>();
     List<ItemsList.Item_count> itemcodelist;
+    RectTransform itemsStartPoint;
     int changeLine1; //드래그앤 드롭으로 자리 변경 시 해당 위치 값
     int changeLine2;
     private void Start()
     {
+        itemsStartPoint = transform.Find("ItemPoint").GetComponent<RectTransform>();
         playerinfo = InGameSystem.mainPlayerInfo;
         itemcodelist = playerinfo.GetItemList(itemtype);
         if (itemcodelist == playerinfo.GetItemList(itemtype))
@@ -31,7 +33,14 @@ public class InventoryItems : MonoBehaviour
             thisitem.GetComponent<Items>().ItemCodeAndCount(itemcodelist[a]);
             thisitem.GetComponent<Items>().listNumber = items.Count;
             items.Add(thisitem);
-            thisitem.GetComponent<RectTransform>().position += new Vector3(47 * (a % 7), -47 * (a / 7));
+            float x = itemsStartPoint.localPosition.x;
+            float y = itemsStartPoint.localPosition.y;
+            float sizex = itemsStartPoint.sizeDelta.x;
+            float sizey = itemsStartPoint.sizeDelta.y;
+
+            thisitem.GetComponent<RectTransform>().localPosition = itemsStartPoint.localPosition;
+            thisitem.GetComponent<RectTransform>().sizeDelta = itemsStartPoint.sizeDelta;
+            thisitem.GetComponent<RectTransform>().localPosition += new Vector3((x + sizex) * (a % 7), (y - sizey) * (a / 7));
         }
     }
     int NoItemsCount(out int line)

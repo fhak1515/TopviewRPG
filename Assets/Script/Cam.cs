@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class Cam : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    Transform target;
     Vector3 targetCha = new Vector3(0,11,-8); //타겟과의 차이
 
     private void Start()
     {
-        // = transform.position - target.transform.position;
+        if (InGameSystem.mainPlayer != null)
+        {
+            target = InGameSystem.mainPlayer.transform;
+        }
     }
 
     private void Update()
     {
         if (target == null)
         {
-            target = InGameSystem.mainPlayer.transform;
+            if (InGameSystem.mainPlayer != null)
+            {
+                target = InGameSystem.mainPlayer.transform;
+            }
         }
         else
         {

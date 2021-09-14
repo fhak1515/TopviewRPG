@@ -261,4 +261,14 @@ public class PlayerInfo : MonoBehaviour
             return false;
         }
     }
+
+    public ItemsList.Item_count EquiWeapon()
+    {
+        return weapon;
+    }
+
+    public ItemsList.Item_count EquiArmo()
+    {
+        return armo;
+    }
 }
