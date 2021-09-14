@@ -17,10 +17,12 @@ public class Player : MonoBehaviour
     //int playerMoveStateAnimator;
     int logint = 0;
     Rigidbody playerRigidbody;
-    Vector3 movePoint;
     moveState playerMoveState; // 플레이어 움직임 상태
     State playerState;
     NavMeshAgent playerNavMeshAgent;
+    Transform m_movePoint;
+    MovePoint m_movePointScr;
+    float moveTimeLook = 0f;
     bool isPause;
     enum moveState
     {
@@ -44,18 +46,21 @@ public class Player : MonoBehaviour
         playerNavMeshAgent = GetComponent<NavMeshAgent>();
         playerState = State.Idle;
         playerinfo.SetPlayerInfo(100, 100, 10, 10);
-
+        m_movePointScr = InGameSystem.Instance.GetMovePointObject().GetComponent<MovePoint>();
         //mainCamera = GameObject.Find("Main Camera");
     }
 
     void Update()
     {
+        moveTimeLook -= Time.deltaTime;
+        if (moveTimeLook < 0)
+            moveTimeLook = 0;
         if (InGameSystem.showSubMenu && InGameSystem.inGamePause)
         {
             if (isPause == false)
             {
-                playerNavMeshAgent.isStopped = true;
-                playerNavMeshAgent.velocity = Vector3.zero;
+                //playerNavMeshAgent.isStopped = true;
+                //playerNavMeshAgent.velocity = Vector3.zero;
                 playerAnimator.speed = 0f;
                 isPause = true;
                 return;
@@ -65,7 +70,7 @@ public class Player : MonoBehaviour
         {
             if (isPause == true)
             {
-                playerNavMeshAgent.isStopped = false;
+                //playerNavMeshAgent.isStopped = false;
                 playerAnimator.speed = 1f;
                 isPause = false;
             }
@@ -83,7 +88,7 @@ public class Player : MonoBehaviour
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     ||playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
                 {
-                    playerNavMeshAgent.enabled = false;
+                    //playerNavMeshAgent.enabled = false;
                     Vector3 point = Scriptcode.GetWoldMousePoint();
                     transform.LookAt(new Vector3(point.x, 0, point.z));
                     attackArea.gameObject.SetActive(true);
@@ -95,7 +100,7 @@ public class Player : MonoBehaviour
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
                 {
-                    playerNavMeshAgent.enabled = false;
+                    //playerNavMeshAgent.enabled = false;
                     Vector3 point = Scriptcode.GetWoldMousePoint();
                     transform.LookAt(new Vector3(point.x, 0, point.z));
                     ChangeState(State.Skill1);
@@ -106,7 +111,7 @@ public class Player : MonoBehaviour
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
                 {
-                    playerNavMeshAgent.enabled = false;
+                    //playerNavMeshAgent.enabled = false;
                     Vector3 point = Scriptcode.GetWoldMousePoint();
                     transform.LookAt(new Vector3(point.x, 0, point.z));
                     attackArea.gameObject.SetActive(true);
@@ -118,7 +123,7 @@ public class Player : MonoBehaviour
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
                 {
-                    playerNavMeshAgent.enabled = false;
+                    //playerNavMeshAgent.enabled = false;
                     Vector3 point = Scriptcode.GetWoldMousePoint();
                     transform.LookAt(new Vector3(point.x, 0, point.z));
                     attackArea.gameObject.SetActive(true);
@@ -129,6 +134,7 @@ public class Player : MonoBehaviour
         if((int)playerState < (int)State.Attack) //공격이 아닐때 움직인다.
         {
             //이동 우선 순위 키보드 -> 마우스
+            /*
             Vector3 playerMove = new Vector3(Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime,
                                              0,
                                              Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime);
@@ -158,6 +164,20 @@ public class Player : MonoBehaviour
             {
                 ChangeState(State.Idle);
             }
+            */
+            if (Input.GetMouseButton(0) && moveTimeLook == 0 && subMenu.CheckPointUI() )
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                //playerNavMeshAgent.enabled = true;
+                if (Physics.Raycast(ray, out RaycastHit raycastHit, 100f, layerMask))
+                {
+                    Vector3 hitpoint = raycastHit.point;
+                    hitpoint.y = 0;
+                    SetMovePoint(hitpoint);
+                }
+                moveTimeLook = 0.02f;
+            }
+            Move();
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -200,6 +220,43 @@ public class Player : MonoBehaviour
         {
             SkillAttack skillAttack = skill1Area.GetComponent<SkillAttack>();
             skillAttack.TriggerEnd();
+        }
+    }
+
+    private void SetMovePoint(Vector3 movepoint)
+    {
+        m_movePoint = m_movePointScr.ShowPoint(movepoint);
+    }
+
+    private void Move()
+    {
+        if (m_movePoint == null)
+            return;
+        ChangeState(State.Move);
+
+        float f_move = moveSpeed*Time.deltaTime;
+        Vector3 move_vector =  m_movePoint.position;
+        Vector3 trans_vector = playerRigidbody.position;
+        move_vector.y = 0;
+        trans_vector.y = 0;
+        Vector3 look_vector = m_movePoint.position;
+        look_vector.y = transform.position.y;
+        transform.LookAt(look_vector);
+        if (f_move > Vector3.Distance(move_vector, trans_vector))
+        {
+            playerRigidbody.MovePosition(m_movePoint.position);
+        }
+        else
+        {
+            playerRigidbody.MovePosition(playerRigidbody.position + (transform.forward * f_move));
+            Debug.Log("f_move : "+f_move);
+        }
+
+        if (m_movePoint.position.x == transform.position.x && m_movePoint.position.z == transform.position.z)
+        {
+            m_movePoint.GetComponent<MovePoint>().HidePoint();
+            m_movePoint = null;
+            ChangeState(State.Idle);
         }
     }
 }

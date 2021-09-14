@@ -10,8 +10,8 @@ public class PlayerInfo : MonoBehaviour
     public int maxMp { get; private set; }
     public int damage { get; private set; }
     public int arm { get; private set; }
-
     
+
     public int itemMaxHp { get; private set; }
     public int itmeMaxMp { get; private set; }
     public int itemDamage { get; private set; }
@@ -21,11 +21,11 @@ public class PlayerInfo : MonoBehaviour
     public int buffArm { get; private set; }
     public int gold;
 
-    [SerializeField] int items1Size = 0;
-    [SerializeField] int items2Size =0;
-    [SerializeField] int items3Size = 0;
-    [SerializeField] int items4Size = 0;
-
+    [SerializeField][Range(0,35)] int items1Size = 0;
+    [SerializeField][Range(0, 35)] int items2Size =0;
+    [SerializeField][Range(0, 35)] int items3Size = 0;
+    [SerializeField][Range(0, 35)] int items4Size = 0;
+    [SerializeField] Transform waponPoint;
     ItemsList.Item_count weapon;
     ItemsList.Item_count armo;
     int weaponLine;
@@ -60,6 +60,7 @@ public class PlayerInfo : MonoBehaviour
     }
     public void SetWeapon(ItemsList.Item_count weapon, int line)
     {
+        //1001
         this.weapon = weapon;
         weaponLine = line;
         itemDamage = InGameSystem.mainItemList.FindItem(weapon.itemcode).attack;
@@ -70,6 +71,15 @@ public class PlayerInfo : MonoBehaviour
         armoLine = line;
         itemArm = InGameSystem.mainItemList.FindItem(armo.itemcode).deffend;
     }
+    public void SetEqi() //장비 적용
+    {
+        if (waponPoint == null)
+        {
+
+        }
+    }
+
+
 
     public int ALLDamage()
     {

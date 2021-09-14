@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InGameSystem : MonoBehaviour
 {
+    public static InGameSystem Instance;
     public static bool showSubMenu = false; //서브 메뉴
     public static bool inGamePause = false; //게임 정지
     public static float inGameSound = 1f;
@@ -13,6 +14,11 @@ public class InGameSystem : MonoBehaviour
     public static SubMenuMain mainSubMenu;
     public static ItemsList mainItemList;
     [SerializeField]GameObject movePoint;
+    InGameSystem()
+    {
+        InGameSystem.Instance = this;
+    }
+
     private void Start()
     {
         mainItemList = GetComponent<ItemsList>();
