@@ -106,12 +106,19 @@ public class SubMenuMain : MonoBehaviour
             StopCoroutine(showinventoryfull);
             showinventoryfull = StartCoroutine(ShowInventoryFull());
         }
-
     }
     IEnumerator ShowInventoryFull()
     {
         inventoryfull.enabled = true;
         yield return new WaitForSeconds(1.2f);
         inventoryfull.enabled = false;
+    }
+    private void OnMouseEnter()
+    {
+        Debug.Log("Enter");
+    }
+    private void OnMouseExit()
+    {
+        Debug.Log("Exit");
     }
 }

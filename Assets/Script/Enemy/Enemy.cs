@@ -49,6 +49,10 @@ public class Enemy : MonoBehaviour
     {
 
     }
+    public void SetEnemySpawnArea(EnemySpawnArea enemySpawnArea)
+    {
+        this.enemySpawnArea = enemySpawnArea;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -104,6 +108,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDestroy()
     {
+        enemySpawnArea.EnemyDie();
         Drop();
     }
     public bool GetHit()

@@ -6,21 +6,33 @@ public class ItemsList : MonoBehaviour
 {
     public class Item_count
     {
-        public int itemcode = 0;
-        public int itemCount = 0;
+        public int itemcode { protected set; get; }
+        public int itemCount { protected set; get; }
 
         public Item_count(int itemcode, int itemCount)
         {
             this.itemcode = itemcode;
             this.itemCount = itemCount;
         }
+        public void SetItemCode(int itemcode)
+        {
+            this.itemcode = itemcode;
+        }
+        public void Items_coutPluse(int itemCount)
+        {
+            this.itemCount += itemCount;
+        }
     }
     public class Iteminfo_s
     {
-        public int attack, deffend, usetype, gold;
-        public float number;
-        
-        public string name, info;
+        public int attack { protected set; get; }
+        public int deffend { protected set; get; }
+        public int usetype { protected set; get; }
+        public int gold { protected set; get; }
+        public float number { protected set; get; }
+
+        public string name { protected set; get; }
+        public string info { protected set; get; }
 
         public Iteminfo_s(string name,int attack, int deffend, int usetype, float number, string info, int gold)
         {

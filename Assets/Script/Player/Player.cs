@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
        
         if (playerState<=State.Move) //재자리 또는 이동일때만 공격할때는 타면 안된다.
         {
-            if (Input.GetMouseButton(1))
+            if (Input.GetMouseButton(1) && subMenu.CheckPointUI())
             {
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     ||playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
                     ChangeState(State.Attack);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha1)) //skill1
+            else if (Input.GetKeyDown(KeyCode.Alpha1) && subMenu.CheckPointUI()) //skill1
             {
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
                     ChangeState(State.Skill1);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) //skill2
+            else if (Input.GetKeyDown(KeyCode.Alpha2) && subMenu.CheckPointUI()) //skill2
             {
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
                     ChangeState(State.Attack);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) //skill3
+            else if (Input.GetKeyDown(KeyCode.Alpha3) && subMenu.CheckPointUI()) //skill3
             {
                 if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_idle_01")
                     || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("arthur_walk_01"))
@@ -182,6 +182,9 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerinfo.AddItems(1001);
+            playerinfo.AddItems(1002);
+            playerinfo.AddItems(1003);  
+            playerinfo.AddItems(1004);
             playerinfo.AddItems(3001);
             playerinfo.AddItems(4001);
             playerinfo.AddItems(5001);
@@ -207,7 +210,6 @@ public class Player : MonoBehaviour
         {
             skill1Area.gameObject.SetActive(true);
         }
-
     }
     public void TriggerEnd()
     {

@@ -11,21 +11,28 @@ public class InventoryPlayerState : MonoBehaviour
     [SerializeField] Text isMP;
     [SerializeField] Text isCri;
     [SerializeField] Text isCriPower;
-
+    string m_attakString;
+    string m_deffendString;
+    string m_hpString;
+    string m_mpString;
     PlayerInfo playinfo;
 
 
     void Start()
     {
         playinfo = InGameSystem.mainPlayerInfo;
+        m_attakString = isAttack.text;
+        m_deffendString = isDeffend.text;
+        m_hpString = isHP.text;
+        m_mpString = isMP.text;
     }
 
     // Update is called once per frame
     void Update()
     {
-        isAttack.text += playinfo.ALLDamage().ToString();
-        isDeffend.text += playinfo.ALLArm().ToString();
-        isHP.text += playinfo.maxHp;
-        isMP.text += playinfo.maxMp;
+        isAttack.text = m_attakString + playinfo.ALLDamage().ToString();
+        isDeffend.text = m_deffendString+playinfo.ALLArm().ToString();
+        isHP.text = m_hpString+playinfo.maxHp;
+        isMP.text = m_mpString+playinfo.maxMp;
     }
 }

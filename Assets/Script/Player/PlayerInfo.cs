@@ -28,6 +28,7 @@ public class PlayerInfo : MonoBehaviour
     [SerializeField] Transform waponPoint;
     ItemsList.Item_count weapon;
     ItemsList.Item_count armo;
+    GameObject m_weapon;
     int weaponLine;
     int armoLine;
     
@@ -61,8 +62,23 @@ public class PlayerInfo : MonoBehaviour
     public void SetWeapon(ItemsList.Item_count weapon, int line)
     {
         //1001
+        bool codeNotChange = false;
+        if (this.weapon !=null)
+        {
+            if (this.weapon.itemcode == weapon.itemcode)
+            {
+                codeNotChange = true;
+            }
+        }
         this.weapon = weapon;
         weaponLine = line;
+        if (!codeNotChange)
+        {
+            if (m_weapon != null)
+                Destroy(m_weapon);
+            m_weapon = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/Weapons/" + weapon.itemcode.ToString()), waponPoint);
+        }
+        
         itemDamage = InGameSystem.mainItemList.FindItem(weapon.itemcode).attack;
     }
     public void SetArmo(ItemsList.Item_count armo, int line)
@@ -78,8 +94,6 @@ public class PlayerInfo : MonoBehaviour
 
         }
     }
-
-
 
     public int ALLDamage()
     {
@@ -208,20 +222,20 @@ public class PlayerInfo : MonoBehaviour
             switch (number-1)
             {
                 case 1:
-                    items1[line].itemcode = itemcode;
-                    items1[line].itemCount += 1;
+                    items1[line].SetItemCode(itemcode);
+                    items1[line].Items_coutPluse(1);
                     break;
                 case 2:
-                    items2[line].itemcode = itemcode;
-                    items2[line].itemCount += 1;
+                    items2[line].SetItemCode(itemcode);
+                    items2[line].Items_coutPluse(1);
                     break;
                 case 3:
-                    items3[line].itemcode = itemcode;
-                    items3[line].itemCount += 1;
+                    items3[line].SetItemCode(itemcode);
+                    items3[line].Items_coutPluse(1);
                     break;
                 case 4:
-                    items4[line].itemcode = itemcode;
-                    items4[line].itemCount += 1;
+                    items4[line].SetItemCode(itemcode);
+                    items4[line].Items_coutPluse(1);
                     break;
             }
 
@@ -253,14 +267,14 @@ public class PlayerInfo : MonoBehaviour
 
                 if (item != null)
                 {
-                    item[line].itemcode = itemcode;
+                    item[line].SetItemCode(itemcode);
                     if (items2[line].itemCount + count > 99)
                     {
                         count = items2[line].itemCount + count - 99;
                     }
                     else
                     {
-                        items2[line].itemCount += count;
+                        items2[line].Items_coutPluse(count);
                         Debug.Log("AddItems End True");
                         return true;
                     }
@@ -280,5 +294,24 @@ public class PlayerInfo : MonoBehaviour
     public ItemsList.Item_count EquiArmo()
     {
         return armo;
+    }
+    public bool CheckEqui(ItemsList.Item_count item)
+    {
+        if (weapon != null)
+        {
+            if (weapon == item)
+                return true;
+        }
+        if (armo != null)
+        {
+            if (armo == item)
+                return true;
+        }
+        Debug.Log("CheckFalse");
+        return false;
+    }
+    public void PlusGold(int plusgold)
+    {
+        gold += plusgold;
     }
 }

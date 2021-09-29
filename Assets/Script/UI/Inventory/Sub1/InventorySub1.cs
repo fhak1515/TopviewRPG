@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventorySub1 : MonoBehaviour
 {
-    [SerializeField] Canvas[] canvas;
+    [SerializeField] GameObject[] canvas;
     int number = 0;
     int shownumber = -1;
     // Update is called once per frame
@@ -15,9 +15,9 @@ public class InventorySub1 : MonoBehaviour
         {
             if (shownumber >= 0 && shownumber < canvas.Length) //안전장치
             {
-                canvas[shownumber].enabled = false;
+                canvas[shownumber].SetActive(false);
             }
-            canvas[number].enabled = true;
+            canvas[number].SetActive(true);
             shownumber = number;
         }
     }

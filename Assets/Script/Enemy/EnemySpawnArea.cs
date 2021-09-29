@@ -6,6 +6,7 @@ public class EnemySpawnArea : MonoBehaviour
 {
     [SerializeField] float size = 0;
     [SerializeField] string enemyName;
+    [SerializeField] float respawnTime = 1f;
     bool enemySpawn = false;
     GameObject enemy;
 
@@ -19,11 +20,15 @@ public class EnemySpawnArea : MonoBehaviour
         GameObject enemyObject = Resources.Load<GameObject>("Prefab/Enemy/"+ enemyName);
         enemy=Instantiate(enemyObject, this.transform);
         enemy.transform.position += new Vector3(Random.Range(-size/2,size/2),0,Random.Range(-size/2,size/2));
+        enemy.GetComponent<Enemy>().SetEnemySpawnArea(this);
         
     }
     private void OnDestroy()
     {
-        Destroy(enemy);
+        if (enemy != null)
+        {
+            Destroy(enemy);
+        }
     }
     public void EnemyDie()
     {
@@ -31,7 +36,7 @@ public class EnemySpawnArea : MonoBehaviour
     }
     IEnumerator EnemySpawnCheck()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(respawnTime);
         EnemySpawn();
     }
 }
