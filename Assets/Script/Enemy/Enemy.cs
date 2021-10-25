@@ -67,6 +67,23 @@ public class Enemy : MonoBehaviour
                 return;
             }
         }
+        if (isDie)
+        {
+            if (enemyNavMesh.enabled)
+            {
+                enemyNavMesh.velocity = Vector3.zero;
+                enemyNavMesh.enabled = false;
+                if(navCoroutine != null)
+                {
+                    StopCoroutine(navCoroutine);
+                }
+            }
+            if (enemyState != EnemyState.Die)
+            {
+                ChangeSate(EnemyState.Die);
+            }
+            return;
+        }
         if (InGameSystem.showSubMenu && InGameSystem.inGamePause)
         {
             if (isPause == true)
@@ -76,21 +93,27 @@ public class Enemy : MonoBehaviour
                 isPause = false;
             }
         }
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= 10f && !isAttackPlay)
-        {
-            isPlayerTaget = true;
-            Move();
-            if (navCoroutine == null)
-            {
-                navCoroutine = StartCoroutine("TagetPlayer");
-            }
-        }else
-        {
-            ChangeSate(EnemyState.Idle);
-            isPlayerTaget = false;
+        if (player == null){
+            player = InGameSystem.mainPlayer;
         }
-
+        if (player != null)
+        {
+            float distance = Vector3.Distance(player.transform.position, transform.position);
+            if (distance <= 10f && !isAttackPlay)
+            {
+                isPlayerTaget = true;
+                Move();
+                if (navCoroutine == null)
+                {
+                    navCoroutine = StartCoroutine("TagetPlayer");
+                }
+            }
+            else
+            {
+                ChangeSate(EnemyState.Idle);
+                isPlayerTaget = false;
+            }
+        }
     }
 
     public void Hit(int damage)
@@ -102,7 +125,7 @@ public class Enemy : MonoBehaviour
             isDie = true;
             Destroy(transform.gameObject,3f);
         }
-
+        hitCheck = true;
     }
     protected virtual void Drop() { }
 

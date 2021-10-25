@@ -278,9 +278,7 @@ public class InventoryItems : MonoBehaviour
 
     public void SortItems()
     {
-        Debug.Log("Sort Start");
         itemcodelist.Sort(compare);
-        Debug.Log("Sort End");
         for (int a= 0; a < itemcodelist.Count; a++)
         {
             items[a].GetComponent<Items>().SettingItem(itemcodelist[a]);
@@ -292,15 +290,10 @@ public class InventoryItems : MonoBehaviour
         mouse -= rectTransform.position;
         int index = -1;
         Vector3 startpoint = itemsStartPoint.position - rectTransform.position;
-        Debug.Log("MousePoint " + mouse);
-        Debug.Log("Point "+ startpoint);
-        Debug.Log("size " + itemsStartPoint.sizeDelta* main.lossyScale);
         
 
         index = (int)(mouse.x / (startpoint.x + (itemsStartPoint.sizeDelta.x * main.lossyScale.x)) +
             (int)(mouse.y / (startpoint.y - (itemsStartPoint.sizeDelta.y * main.lossyScale.y))) *7);
-
-        Debug.Log("index : "+ index);
 
 
         if (index < 0 || index >= items.Count)
@@ -316,12 +309,10 @@ public class InventoryItems : MonoBehaviour
         if (0 <= mouse.x && rectTransform.sizeDelta.x * main.localScale.x >= mouse.x
             && 0 >= mouse.y && -rectTransform.sizeDelta.y * main.localScale.y <= mouse.y)
         {
-            Debug.Log("In");
             return true;
         }
         else
         {
-            Debug.Log("Out");
             return false;
         }
     }

@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] PlayerInfo playerinfo;
     [SerializeField] Transform attackArea;
     [SerializeField] Transform skill1Area;
-    [SerializeField] SubMenuMain subMenu;
+    SubMenuMain subMenu;
     Transform skill2Area;
     Transform skill3Area;
     //int playerMoveStateAnimator;
@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
         playerState = State.Idle;
         playerinfo.SetPlayerInfo(100, 100, 10, 10);
         m_movePointScr = InGameSystem.Instance.GetMovePointObject().GetComponent<MovePoint>();
+        subMenu = GameObject.Find("SubMenu").GetComponent<SubMenuMain>();
         //mainCamera = GameObject.Find("Main Camera");
     }
 
@@ -211,6 +212,15 @@ public class Player : MonoBehaviour
             skill1Area.gameObject.SetActive(true);
         }
     }
+    public void AttackStart()
+    {
+        if (playerState == State.Attack)
+        {
+            NomalAttak nomalAttak = attackArea.GetComponent<NomalAttak>();
+            nomalAttak.AttackStart();
+        }
+    }
+
     public void TriggerEnd()
     {
         if (playerState == State.Attack)
@@ -260,5 +270,10 @@ public class Player : MonoBehaviour
             m_movePoint = null;
             ChangeState(State.Idle);
         }
+    }
+
+    public void Hit()
+    {
+        
     }
 }

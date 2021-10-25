@@ -31,11 +31,17 @@ public class PlayerInfo : MonoBehaviour
     GameObject m_weapon;
     int weaponLine;
     int armoLine;
-    
+    float attackBuffTime = 0f;
+    float defendBuffTime = 0f;
+    Coroutine m_attackBuff;
+    Coroutine m_defendBuff;
+
+
     List<ItemsList.Item_count> items1 = new List<ItemsList.Item_count>(); //장비템창
     List<ItemsList.Item_count> items2 = new List<ItemsList.Item_count>(); //소비템창
     List<ItemsList.Item_count> items3 = new List<ItemsList.Item_count>(); //잡템창
     List<ItemsList.Item_count> items4 = new List<ItemsList.Item_count>(); //퀘스트템창
+    
     
     private void Start()
     {
@@ -49,6 +55,13 @@ public class PlayerInfo : MonoBehaviour
             items4Size = 35;
 
         LoadItems();
+    }
+    private void OnDestroy()
+    {
+        if (m_attackBuff != null)
+            StopCoroutine(m_attackBuff);
+        if (m_defendBuff != null)
+            StopCoroutine(m_defendBuff);
     }
     public void SetPlayerInfo(int HP, int MP, int Damage, int Arm)
     {
@@ -86,13 +99,6 @@ public class PlayerInfo : MonoBehaviour
         this.armo = armo;
         armoLine = line;
         itemArm = InGameSystem.mainItemList.FindItem(armo.itemcode).deffend;
-    }
-    public void SetEqi() //장비 적용
-    {
-        if (waponPoint == null)
-        {
-
-        }
     }
 
     public int ALLDamage()
@@ -313,5 +319,52 @@ public class PlayerInfo : MonoBehaviour
     public void PlusGold(int plusgold)
     {
         gold += plusgold;
+    }
+    public void HitDamage(int damage)
+    {
+        hp -= damage;
+    }
+    public void UsePosion(int type, int number)
+    {
+        switch (type)
+        {
+            case 1:
+                hp += number;
+                break;
+            case 2:
+                attackBuffTime = 10f;
+                if (m_attackBuff == null)
+                    m_attackBuff = StartCoroutine(AttackBuff(number));
+                break;
+            case 3:
+                defendBuffTime = 10f;
+                if (m_defendBuff == null)
+                    m_defendBuff = StartCoroutine(DeffendBuff(number));
+                break;
+        }
+    }
+
+    IEnumerator AttackBuff(int number)
+    {
+        buffDamage += number;
+        while (attackBuffTime > 0f)
+        {
+            if (!InGameSystem.inGamePause)
+                attackBuffTime -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        buffDamage -= number;
+    }
+
+    IEnumerator DeffendBuff(int number)
+    {
+        buffArm += number;
+        while (defendBuffTime > 0f)
+        {
+            if (!InGameSystem.inGamePause)
+                defendBuffTime -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        buffArm -= number;
     }
 }

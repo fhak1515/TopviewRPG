@@ -14,6 +14,7 @@ public class InGameSystem : MonoBehaviour
     public static SubMenuMain mainSubMenu;
     public static ItemsList mainItemList;
     [SerializeField]GameObject movePoint;
+    [SerializeField] Texture2D cursorTexture;
     InGameSystem()
     {
         InGameSystem.Instance = this;
@@ -22,7 +23,10 @@ public class InGameSystem : MonoBehaviour
     private void Start()
     {
         mainItemList = GetComponent<ItemsList>();
-        GameStartSetting();
+        //Vector2 size =  cursorTexture.texelSize;
+        //Vector2 mousePoint = Input.mousePosition;
+
+        Cursor.SetCursor(cursorTexture, Vector3.zero, CursorMode.Auto);
     }
     private void Update()
     {

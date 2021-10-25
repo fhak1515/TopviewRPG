@@ -35,6 +35,6 @@ public class SkillAttack : Attack
     }
     public void TriggerEnd()
     {
-        AttackEnd();
+        gameObject.SetActive(false);
     }
 }

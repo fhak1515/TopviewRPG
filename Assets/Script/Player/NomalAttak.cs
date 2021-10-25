@@ -32,8 +32,4 @@ public class NomalAttak : Attack
             }
         }
     }
-    public void TriggerEnd()
-    {
-        AttackEnd();
-    }
 }

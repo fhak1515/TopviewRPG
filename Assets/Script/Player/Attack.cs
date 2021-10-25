@@ -6,13 +6,14 @@ public class Attack : MonoBehaviour
 {
     [SerializeField] protected Player player;
     [SerializeField] protected PlayerInfo playerinfo;
+    [SerializeField] protected BoxCollider m_collider;
 
-    public void AttackStart() // Ω√¿€
+    public void AttackStart()
     {
-        
+        gameObject.SetActive(true);
     }
-    public void AttackEnd()
+    public void TriggerEnd()
     {
-        transform.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
